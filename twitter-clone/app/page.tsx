@@ -12,7 +12,9 @@ export default async function HomePage() {
 
   return (
     <main>
-      <h1 className="mb-4 text-lg font-bold text-white">📝 Latest Tweets</h1>
+      <h1 className="mb-4 text-lg font-bold text-foreground">
+        📝 Latest Tweets
+      </h1>
       <div className="flex flex-col gap-3">
         {tweets.posts.map((tweet) => (
           <TweetCard key={tweet.id} tweet={tweet} />
