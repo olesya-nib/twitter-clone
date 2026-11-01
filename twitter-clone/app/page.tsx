@@ -1,36 +1,23 @@
-"use client";
-import { useEffect, useState } from "react";
+import TweetCard from "@/components/TweetCard";
+import type { TweetsResponse } from "@/types/tweet";
 
-type Tweet = {
-  id: number;
-  user: string;
-  content: string;
-  timestamp: string;
-};
+async function getTweets(): Promise<TweetsResponse> {
+  const res = await fetch("https://dummyjson.com/posts");
+  if (!res.ok) throw new Error("Failed to fetch tweets");
+  return res.json();
+}
 
-export default function Home() {
-  const [tweets, setTweets] = useState<Tweet[]>([]);
-
-  useEffect(() => {
-    async function fetchTweets() {
-      const res = await fetch("/api/tweets");
-      const data = await res.json();
-      setTweets(data);
-    }
-    fetchTweets();
-  }, []);
+export default async function HomePage() {
+  const tweets = await getTweets();
 
   return (
-    <div>
-      <h1>Latest Tweets</h1>
-      {tweets.map((tweet) => (
-        <div key={tweet.id}>
-          <p>
-            <strong>{tweet.user}</strong>: {tweet.content}
-          </p>
-          <small>{tweet.timestamp}</small>
-        </div>
-      ))}
-    </div>
+    <main>
+      <h1 className="mb-4 text-lg font-bold text-white">📝 Latest Tweets</h1>
+      <div className="flex flex-col gap-3">
+        {tweets.posts.map((tweet) => (
+          <TweetCard key={tweet.id} tweet={tweet} />
+        ))}
+      </div>
+    </main>
   );
 }
